@@ -1,7 +1,9 @@
+import { readFileSync, writeFileSync } from "fs";
 import { createInterface } from "readline";
 import chalk from "chalk";
 
 const tasks = [];
+const DB_FILE = "tasks.txt";
 
 const rl = createInterface({
   input: process.stdin,
@@ -18,10 +20,15 @@ function displayMenu() {
   console.log("\n");
 }
 
+function loadTask() {}
+
+function saveTask() {}
+
 function addTask() {
   rl.question(chalk.bgMagentaBright("Escribe la tarea: "), (task) => {
     tasks.push({ task, completed: false });
     console.log(chalk.green.bold("Tarea agregada con éxito\n"));
+    saveTask();
     displayMenu();
     chooseOption();
   });
@@ -57,6 +64,7 @@ function completeTask() {
       const index = parseInt(taskNumber) - 1;
       if (index >= 0 && index < tasks.length) {
         tasks[index].completed = true;
+        saveTask();
         console.log(chalk.green.bold("Tarea marcada con exito ✅\n"));
       } else {
         console.log(chalk.red.bold("Número de tarea inválido \n"));
@@ -92,6 +100,6 @@ function chooseOption() {
     }
   });
 }
-
+loadTask();
 displayMenu();
 chooseOption();
