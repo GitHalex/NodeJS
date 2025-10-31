@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync, write, writeFileSync } from "fs";
 import { createInterface } from "readline";
 import chalk from "chalk";
 
@@ -20,9 +20,30 @@ function displayMenu() {
   console.log("\n");
 }
 
-function loadTask() {}
+function loadTask() {
+  try {
+    const data = readFileSync(DB_FILE, "utf-8");
+    const lines = data.split("\n");
+    tasks.length = 0; // Clear existing tasks
+    lines.forEach((line) => {
+      if (line.trim() !== "") {
+        const [task, completed] = line.split("|");
+        tasks.push({ task, completed: completed === true });
+      }
+    });
+    console.log(chalk.green.bold("Las tareas se han cargado dede la BD\n"));
+  } catch (error) {
+    console.log(chalk.red.bold("No se pudo cargar las tareas desde la BD\n"));
+  }
+}
 
-function saveTask() {}
+function saveTask() {
+  const data = tasks.map((t) => `${t.task}|${t.completed}`).join("\n");
+  writeFileSync(DB_FILE, data, "utf-8");
+  console.log(
+    chalk.green.bold("Las tareas se han guardado en la BD con exito\n")
+  );
+}
 
 function addTask() {
   rl.question(chalk.bgMagentaBright("Escribe la tarea: "), (task) => {

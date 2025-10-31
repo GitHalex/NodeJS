@@ -1,0 +1,3 @@
+primera tarea|true
+terminal esta implementacion|false
+comensar siguiente acplicacion de oprtimizar imagenes con node|false
